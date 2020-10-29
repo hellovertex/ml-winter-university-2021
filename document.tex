@@ -105,34 +105,57 @@
 	\newtheorem{Lemma}{Lemma}
 	\section*{Meta Blub}
 	
-	Let $\mathcal{S}$ denote state space and $\mathcal{A}$ denote action space. Let $\mathcal{P}=\{1,...,P\}$ be  the set of players and $\mathcal{N}=\{N_0,...,N_{P}\}$ the set of (neural network) function approximators, where $N_i : \mathcal{S} \mapsto \mathcal{A}$, $N_i(s) = a$, %$s\in\mathcal{S}, a\in\mathcal{A}$,
+	Let $\mathcal{S}$ denote state space and $\mathcal{A}$ denote action space. Let $\mathcal{I}=\{1,...,P\}$ be  the set of players and $\mathcal{P}=\{N_1,...,N_{P}\}$ the set of corresponding (neural network) function approximators, where $N_i : \mathcal{S} \mapsto \mathcal{A}$, $N_i(s) = a$, %$s\in\mathcal{S}, a\in\mathcal{A}$,
 	corresponds to player $i$. \\
 	
-	\begin{Def}[Agreement, stability] {Let $i\in\mathcal{P}, s, s'\in\mathcal{S}$.}
-		\begin{itemize}
-%			\item[i)] Player $i$ agrees on two states $s, s'$, if $N_i(s) = N_i(s')$
-			\item[i)] Agreement between two states $s,s'$ is defined as the ratio  $\frac{1}{P}\cdot|\{ i \in\mathcal{P}: N_i(s) = N_i(s')\}|$
-%			\item[ii)] Players $i, j$ agree on one state $s$, if $N_i(s) = N_j(s)$
-			\item[ii)] Stability of a state $s$ is defined as the ratio
-			$\frac{2}{P(P-1)}\cdot|\{ (N_i, N_j) \in\mathcal{N}\times\mathcal{N}: N_i(s) = N_j(s), i\neq j\}|$
-		\end{itemize}
-		
+	%We say player $i$ agrees with player $p$ (on states $s,s'$), if $N_i(s) = N_i(s')$ and $N_p(s) = N_p(s')$. This inspires the following:
+	%Intro was ist los wir spielen hanabi
+	%stability raus nach unten
+	%nach $C_p(s)$ kommt dass das weighting fehlt
+	%dann definieren wir stability
+	%und similarity
+	%schreiben neuen classifier
+	%und dann die architecture
+	
+	Playing with a new teammate $p$, the goal is to predict the action $a$ that $p$ will take, facing a new state $s$. Based on the pool $\mathcal{P}$ of pretrained agents, we will define the notion of $consistency$ of two states, that will help us building a simple classifier to do so.
+	\begin{Def}[consistency] {For $s,s'\in\mathcal{S}$, let  }
+		%{Let $p\in\mathcal{P}, s, s'\in\mathcal{S}$.}
+		\begin{align*}
+		consistency_{\mathcal{P}}(s,s') = \frac{1}{P}\cdot|\{ i \in\mathcal{P}: N_i(s) = N_i(s')\}|.
+		\end{align*}
+		An agent $i\in\mathcal{I}$ is said to be consistent in $(s,s')$, if $N_i(s) =	 N_i(s')$.
 	\end{Def}
-
-	Then we can define
-	\begin{Def}[Distance] {Let $i\in\mathcal{P}, s, s'\in\mathcal{S}$.}
-		\begin{itemize}
-			\item[]  The distance d between two states is given by: $d(s, s') = 1 - Agreement(s,s')$
-		\end{itemize}
-		
+ 	We now define a simple distance function, which we can minimize later, to predict an action that $p$ will take:
+	\begin{Def}[Distance] {For $s,s'\in\mathcal{S}$, let  the distance be defined as}
+	\begin{align*}
+	d(s, s') = 1 - consisteny_{\mathcal{P}}(s,s').
+	\end{align*}
 	\end{Def}
 	After having observed data $D = \{(s_1, a_1),...,(s_n,a_n)\}$ from a new teammate $p$, we can give the action classifier as 
 	\begin{align*}
-	C_p(s) = \underset{a}{argmin} \{ d(\tilde{s}, s): (\tilde{s}, a)\in D \}
+	C_p(s) = \underset{a}{argmin} \{ d(\tilde{s}, s): (\tilde{s}, a)\in D \}.
 	\end{align*}
+	So we guess as the action $p$ takes in $s$, the action $p$ took in the state $s_{i\leq n}$,  with maximum $consistency_{\mathcal{P}}(s_{i\leq n}, s)$. However the suggested distance, does not account for the fact, that some players in $\mathcal{I}$ are more likely similar\footnote{similar w.r.t to which states they consider consistent} to $p$, than others. When the consistency voting happens, we would like to give those agents more weight than others. Therefore, we introduce the following notion on the observed data $D$:
+	\begin{Def}[agreement] {For $s,s'\in\mathcal{S}, i,p\in\mathcal{P}$, let  }
+		\begin{align*}
+		agreement_D(i,p) =  \frac{2}{n(n-1)}\cdot|\{ (s,s')\in D\times D: N_i(s) = N_i(s') \text{ and } N_p(s) = N_p(s')\}|.
+		\end{align*}
+		%%Agent $i$ $agrees$ with $p$ on $(s,s')$, if $N_i(s) = N_i(s') \text{ and } N_p(s) = N_p(s')$
+	\end{Def}
+	The agreement of two agents $i,p$ is higher, the more pairs $(s,s')\in D$ exist, that $i$ and $p$ are both consistent on. Under the assumption, that this implies the agents are more likely to perform the same actions in new states, we now define p-similarity of two states, as a weighted version of consistency:
 	
-	The goal is, to combine the two notions in Definition 1, to obtain a $similarity$ of two states, relative to our teammate (for reasons I explained on slack). What I initially suggested was to do it manually (i.e. no NN training), however, I think this can be done using meta learning in the following way: \\
 
+%It is beneficial however, to weight $d(\tilde{s},s)$ by $stability_p(\tilde{s},s)$ the obtain a $similarity$ of two states, relative to our teammate (for reasons I explained on slack).
+	
+	\begin{Def}[p-similarity] {For $s,s'\in\mathcal{S},i,p\in\mathcal{P}$, let  }
+		\begin{align}
+			similarity_p(s,s') = \frac{1}{P}\sum \{agreement_D(i,p)\in\mathbb{R}: i \text{ is consistent in } (s,s') \}.
+		\end{align}
+	\end{Def}
+	
+	
+	
+	
 	
 	Let $C_{\theta}$ denote our meta classifier. We want to learn $\theta=\theta_0$, such that
 	\begin{itemize}
