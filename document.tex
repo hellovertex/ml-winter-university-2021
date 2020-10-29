@@ -153,8 +153,10 @@
 		\end{align}
 	\end{Def}
 	
-	
-	
+	The similarity definition gives rise to a new predictor, that asymptotically excludes agents from the action voting, that are unlikely to be consistent on the same state pairs, as $p$.
+	\begin{align*}
+	C^*_p(s) = \underset{a}{argmax} \{ similarity_p(\tilde{s}, s): (\tilde{s}, a)\in D \}.
+	\end{align*}
 	
 	
 	Let $C_{\theta}$ denote our meta classifier. We want to learn $\theta=\theta_0$, such that
