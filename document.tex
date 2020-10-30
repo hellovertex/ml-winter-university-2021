@@ -118,12 +118,12 @@
 	%und dann die architecture
 	
 	Playing with a new teammate $p$, the goal is to predict the action $a$ that $p$ will take, facing a new state $s$. Based on the pool $\mathcal{P}$ of pretrained agents, we will define the notion of $consistency$ of two states, that will help us building a simple classifier to do so.
-	\begin{Def}[consistency] {For $s,s'\in\mathcal{S}$, let  }
+	\begin{Def}[consistency] {Let $s,s'\in\mathcal{S}$ }
 		%{Let $p\in\mathcal{P}, s, s'\in\mathcal{S}$.}
-		\begin{align*}
-		consistency_{\mathcal{P}}(s,s') = \frac{1}{P}\cdot|\{ i \in\mathcal{P}: N_i(s) = N_i(s')\}|.
-		\end{align*}
-		An agent $i\in\mathcal{I}$ is said to be consistent in $(s,s')$, if $N_i(s) =	 N_i(s')$.
+		\begin{itemize}
+			\item[i)] An agent $i\in\mathcal{I}$ is said to be consistent in $(s,s')$, if $N_i(s) = N_i(s')$
+			\item[ii)] $consistency_{\mathcal{P}}(s,s') = \frac{1}{P}\cdot|\{ i \in\mathcal{P}: i \text{ is consistent in } (s,s') \}|$.
+		\end{itemize}		
 	\end{Def}
  	We now define a simple distance function, which we can minimize later, to predict an action that $p$ will take:
 	\begin{Def}[Distance] {For $s,s'\in\mathcal{S}$, let  the distance be defined as}
@@ -135,7 +135,8 @@
 	\begin{align*}
 	C_p(s) = \underset{a}{argmin} \{ d(\tilde{s}, s): (\tilde{s}, a)\in D \}.
 	\end{align*}
-	So we guess as the action $p$ takes in $s$, the action $p$ took in the state $s_{i\leq n}$,  with maximum $consistency_{\mathcal{P}}(s_{i\leq n}, s)$. However the suggested distance, does not account for the fact, that some players in $\mathcal{I}$ are more likely similar\footnote{similar w.r.t to which states they consider consistent} to $p$, than others. When the consistency voting happens, we would like to give those agents more weight than others. Therefore, we introduce the following notion on the observed data $D$:
+	So we guess as the action $p$ takes in $s$, the action $p$ took in the state $s_{i\leq n}$,  with maximum $consistency_{\mathcal{P}}(s_{i\leq n}, s)$. However the suggested distance, does not account for the fact, that some players in $\mathcal{I}$ are more likely similar\footnote{similar w.r.t to which states they consider consistent} to $p$, than others. When the consistency voting happens, we would like to give those agents more voting-weight. Therefore, we introduce the following notion on the observed data $D$:
+	% ACTUALLY WE MAY ALSO USE THE AVERAGE OF THE FIRST N ARGMIN acctions
 	\begin{Def}[agreement] {For $s,s'\in\mathcal{S}, i,p\in\mathcal{P}$, let  }
 		\begin{align*}
 		agreement_D(i,p) =  \frac{2}{n(n-1)}\cdot|\{ (s,s')\in D\times D: N_i(s) = N_i(s') \text{ and } N_p(s) = N_p(s')\}|.
