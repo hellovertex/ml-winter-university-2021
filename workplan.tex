@@ -1,0 +1,133 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage{geometry}
+\geometry{a4paper,left=30mm,right=30mm, top=35mm, bottom=30mm}
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{algorithm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{array}
+\usepackage{wasysym}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage {tikz}
+\usetikzlibrary {positioning}
+%\usepackage {xcolor}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usepackage{latexsym}
+\usepackage{lastpage} % Seitenzahlen
+%\usepackage{MNsymbol}
+\pagestyle{fancy}
+\usepackage[noend]{algpseudocode}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{tabularx} %schöne tabellen
+\parindent0pt %einrücken verhindern
+\bibliographystyle{unsrt}
+
+\usepackage{polynom}
+\cfoot{\thepage  \ / \pageref{LastPage}}
+
+% % % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % % %
+\newcommand{\modullang}{BAs}
+\newcommand{\semester}{SoSe 2018}
+\newcommand{\modul}{BA}
+\newcommand{\blatt}{}
+\newcommand{\tutorium}{Mi 16-18 Uhr}
+\newcommand{\tutor}{}
+\newcommand{\datum}{\today}
+\renewcommand{\proofname}{Proof}
+\newcolumntype{C}{>{\Centering\arraybackslash}X}
+% % % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\begin{document} 
+	
+	%%% Kopfzeile linker Bereich
+	%      gerade Seite   ungerade Seite
+	\rhead[ \leftmark   ]{\textbf{}}
+	%%% Kopfzeile mittlerer Bereich
+	%      gerade Seite   ungerade Seite
+	\chead[\leftmark   ]{\leftmark{}}
+	%%% Kopfzeile linker Bereich
+	%      gerade Seite             ungerade Seite
+	\lhead[\textbf{}]{\blatt}
+	
+	
+	%-- Deckblatt --						      
+	\thispagestyle{empty}
+	\begin{center}
+		
+		\vspace*{1.4cm}
+		{\LARGE \textbf{Technische Universität Berlin}}
+		
+		\vspace{0.5cm}
+		
+		{\large Master Thesis outline: Informal draft\\[1mm]}
+
+		
+		
+		\vspace{1.0cm}
+		{\LARGE \textbf{Title: tba}}\\
+		\vspace*{1.0cm}
+		
+	
+		Sascha Lange%, 349960
+		
+		
+		
+	\end{center}
+	
+	\renewcommand{\labelenumi}{\alph{enumi})}
+	\renewcommand{\labelenumii}{(\roman{enumii})}
+	\renewcommand{\labelenumiii}{\arabic{enumiii}.}
+	\renewcommand{\contentsname}{Table of Contents}
+	%\renewcommand{\labelenumii}{\textbf{-}}	
+	
+
+
+
+%-- Eigentlicher Text --
+	\newpage
+	\newtheorem{Cor}{Corollary}
+	\newtheorem{Theorem}{Theorem}
+	\newtheorem{Def}{Definition}
+	\newtheorem{Prop}{Proposition}
+	\newtheorem{Lemma}{Lemma}
+	\section*{Meta Blub}
+% IDEA:
+% 1. Train pool of mini models
+% [optional] build similarity matrices that form the agreement tensor	
+% 2. meta learn a network that can generate mini models using a pool of states
+% I am creating a draft for the working plan until next week.
+
+Outline of steps:
+
+
+
+\begin{tabularx}{\textwidth}{|l|X|X|}
+    step & informal & formal \\
+\hline
+    1 & use env. to generate states 
+		(all expert levels, requires $\geq 1$  good agents)  
+	& sample from DEC-POMDP \\
+    2 & Obtain pool of agents 
+	& Q-function estimation, policy gradient\\
+    3 & Train minimodel for each agent (predicts agents action given state) & neural-net function approximator $N_i: \mathcal{S} \rightarrow \mathcal{A}$ for each agent $i \in POOL$\\
+   4 & Compute Meta-mini-model by considering tasks as subset of agents $\subset POOL$ (Optional: hypernetwork approach, evolutionary approach) & using \href{https://proceedings.mlr.press/v70/finn17a/finn17a.pdf}{Alg.1 from MAML} where $\mathcal{T}_i \subset{POOL}$ \\
+  5 & Proof of concepts for i) simple environemnts (grid, graph)  ii) chess? iii) hanabi small, mid, normal & -
+\end{tabularx}
+
+
+
+\end{document}

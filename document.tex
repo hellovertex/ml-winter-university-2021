@@ -72,12 +72,12 @@
 		
 		\vspace{0.5cm}
 		
-		{\large Notes\\[1mm]}
+		{\large Master Thesis outline: Informal draft\\[1mm]}
 
 		
 		
 		\vspace{1.0cm}
-		{\LARGE \textbf{BlUB}}\\
+		{\LARGE \textbf{Title: tba}}\\
 		\vspace*{1.0cm}
 		
 		
@@ -96,7 +96,11 @@
 	\renewcommand{\labelenumiii}{\arabic{enumiii}.}
 	\renewcommand{\contentsname}{Table of Contents}
 	%\renewcommand{\labelenumii}{\textbf{-}}	
-	%-- Eigentlicher Text --
+	
+
+
+
+%-- Eigentlicher Text --
 	\newpage
 	\newtheorem{Cor}{Corollary}
 	\newtheorem{Theorem}{Theorem}
@@ -107,15 +111,7 @@
 	
 	Let $\mathcal{S}$ denote state space and $\mathcal{A}$ denote action space. Let $\mathcal{I}=\{1,...,P\}$ be  the set of players and $\mathcal{P}=\{N_1,...,N_{P}\}$ the set of corresponding (neural network) function approximators, where $N_i : \mathcal{S} \mapsto \mathcal{A}$, $N_i(s) = a$, %$s\in\mathcal{S}, a\in\mathcal{A}$,
 	corresponds to player $i$. \\
-	
-	%We say player $i$ agrees with player $p$ (on states $s,s'$), if $N_i(s) = N_i(s')$ and $N_p(s) = N_p(s')$. This inspires the following:
-	%Intro was ist los wir spielen hanabi
-	%stability raus nach unten
-	%nach $C_p(s)$ kommt dass das weighting fehlt
-	%dann definieren wir stability
-	%und similarity
-	%schreiben neuen classifier
-	%und dann die architecture
+
 	
 	Playing with a new teammate $p$, the goal is to predict the action $a$ that $p$ will take, facing a new state $s$. Based on the pool $\mathcal{P}$ of pretrained agents, we will define the notion of $consistency$ of two states, that will help us building a simple classifier to do so.
 	\begin{Def}[consistency] {Let $s,s'\in\mathcal{S}$ }
@@ -193,4 +189,3 @@
 	
 \end{document}
 
-%Python’s default arguments are evaluated once when the function is defined, not each time the function is called (like it is in say, Ruby). This means that if you use a mutable default argument and mutate it, you will and have mutated that object for all future calls to the function as well. (https://docs.python-guide.org/writing/gotchas/)
